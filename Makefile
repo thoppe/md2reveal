@@ -19,3 +19,9 @@ push:
 	git commit -a
 	git push
 
+clean:
+	find . -name "*~" | xargs -I {} rm {}
+	find . -name "\#" | xargs -I {} rm {}
+	find . -name "*.pyc" | xargs -I {} rm {}
+	rm -rf $(target_folder)/css talks/js
+
