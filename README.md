@@ -17,9 +17,6 @@ python tool to convert extended markdown to reveal.js. `make demo` builds a reve
 
 ## images
 	!(image src)[optional image link] <<options>>
-	
-For example
-	!(examples/cc.svg) <<width:200>> <<transparent>>
 
 ## links
 	[link text](link src)
