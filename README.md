@@ -1,5 +1,5 @@
 # md2reveal
-python tool to convert extended markdown to reveal.js. `make demo` builds a reveal.js version of this text.
+python tool to convert extended markdown to [reveal.js](https://github.com/hakimel/reveal.js). `make demo` builds a reveal.js version of this text.
 
 ## slide control
 	====  horizontal slide
