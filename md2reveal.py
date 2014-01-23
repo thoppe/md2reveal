@@ -85,7 +85,7 @@ local_dir   = os.getcwd()
 # Header read
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
-print script_dir
+logging.info("Working script directory "+script_dir)
 
 fin_header = os.path.join(script_dir, "org", "header.html")
 with open(fin_header) as FIN: header = FIN.read()
