@@ -265,6 +265,8 @@ class markdown_multiline(object):
                 rdest = "reveal.js/css/theme"
                 f_css = os.path.join(rdest,packaged_themes[index])
                 v = theme_string % f_css
+            elif os.path.exists(theme):
+                v = theme_string % theme
             else:
                 logging.critical("Theme not found! %s"%theme)
                 logging.critical("Local themes: %s"%local_list)
