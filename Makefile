@@ -30,4 +30,5 @@ clean:
 	find . -name "*~" | xargs -I {} rm {}
 	find . -name "\#" | xargs -I {} rm {}
 	find . -name "*.pyc" | xargs -I {} rm {}
-
+	rm -fv demo.html
+	rm -rfv .render_cache/
