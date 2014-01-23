@@ -1,3 +1,5 @@
+{"theme":"night.css"}
+
 # md2reveal
 python tool to convert extended markdown to reveal.js
 
@@ -21,17 +23,14 @@ _formating_ in *action!*
 ## $\rho \left(\frac{\partial \mathbf{v}}{\partial t} + \mathbf{v} \cdot \nabla \mathbf{v} \right) = -\nabla p + \nabla \cdot\boldsymbol{\mathsf{T}} + \mathbf{f}$
 
 ====*
-
-## images
+### images
 	!(image src)[optional image link] <<options>>
-	
-
-For example
-	!(examples/cc.svg) <<width:200>> <<transparent>>
-!(examples/cc.svg) <<width:200>> <<transparent>>
+    ...
+	!(cc.svg) <<width:200>> <<transparent>>
+!(cc.svg) <<width:200>> <<transparent>>
 
 
-## links
+### links
 	[link text](link src)
 	
 For example [google](https://www.google.com), 

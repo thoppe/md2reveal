@@ -13,6 +13,12 @@ double_angles   = boxExpr('<<','>>','double_angles')
 
 _CODE_LANUAGE = "python"
 
+local_themes = (glob.glob("*.css") +
+                glob.glob("css/*.css") ) 
+packaged_themes = ["beige.css","default.css","night.css",
+                   "serif.css","sky.css","blood.css","moon.css",
+                   "simple.css","solarized.css"]
+
 # Only split on spaces, newlines are important
 ParserElement.setDefaultWhitespaceChars(" ")
 
@@ -92,35 +98,6 @@ def process_olist_block(s,loc,tokens):
     items = map(_global_markdown_line, items)
     items = ["<li>{}</li>".format(x) for x in items]
     return "<ol>{}</ol>".format('\n'.join(items))
-
-
-available_themes = (glob.glob("js/reveal.js/css/theme/*.css") +
-                    glob.glob("css/*.css") + 
-                    glob.glob("*.css") )
-theme_string = r'<link rel="stylesheet" href="%s" id="theme">'   
-
-def handle_options(options):
-    output_str = []
-
-    if "theme" in options:
-        theme = options['theme']
-        theme_list = [os.path.basename(x) for x in available_themes]
-        if theme not in theme_list:
-            logging.critical("Theme not found! %s"%theme)
-            logging.critical("Known themes: %s"%set(theme_list))
-        else:
-            index = theme_list.index(theme)
-            v = theme_string % available_themes[index]
-            output_str.append(v)
-    if "include_code" in options:
-        f_code = options['include_code']
-        with open(f_code) as FIN:
-            raw = FIN.read()
-        v = "<pre><code>%s</code></pre>" % raw
-        output_str.append(v)
-
-
-    return "\n".join(output_str)
 
 class markdown_line(object):
 
@@ -264,10 +241,46 @@ class markdown_multiline(object):
         text = '%s'%tokens[0]
         try:
             options = json.loads(text)
-            return handle_options(options)
         except:
-            logging.critical("Error with option text %s"%text)
+            logging.critical("Can't convert option to JSON %s"%text)
             return ""
+
+        return self.handle_options(options)
+
+    def handle_options(self, options):
+        theme_string = r'<link rel="stylesheet" href="%s" id="theme">'   
+        output_str = []
+
+        if "theme" in options:
+            theme = str(options['theme'])
+            local_list = [os.path.basename(x) for x in local_themes]
+            
+            v = ""
+            if theme in local_list:
+                index = local_list.index(theme)
+                f_css = local_themes[index]
+                v = theme_string % f_css
+            elif theme in packaged_themes:
+                index = packaged_themes.index(theme)
+                rdest = "reveal.js/css/theme"
+                f_css = os.path.join(rdest,packaged_themes[index])
+                v = theme_string % f_css
+            else:
+                logging.critical("Theme not found! %s"%theme)
+                logging.critical("Local themes: %s"%local_list)
+                logging.critical("Packaged themes: %s"%packaged_themes)
+            output_str.append(v)
+
+
+        if "include_code" in options:
+            f_code = options['include_code']
+            with open(f_code) as FIN:
+                raw = FIN.read()
+            v = "<pre><code>%s</code></pre>" % raw
+            output_str.append(v)
+
+
+        return "\n".join(output_str)
 
 
     def process_line_text(self,s,loc,tokens):
