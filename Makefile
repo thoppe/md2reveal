@@ -10,9 +10,7 @@ build_reveal.js:
 	-git submodule add https://github.com/hakimel/reveal.js.git reveal.js
 
 demo:
-	python md2reveal.py demo.md --output demo.html
-	@echo "demo.html created"
-
+	python md2reveal.py demo.md --output demo.html --verbose
 
 commit:
 	@-make push
@@ -22,7 +20,7 @@ push:
 	git status
 	git add Makefile
 	git add src
-	git add *.md
+	git add *.md *.py
 	git commit -a
 	git push
 

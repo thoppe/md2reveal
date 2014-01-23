@@ -1,4 +1,4 @@
-import os, sys, argparse
+import os, sys, argparse, logging
 from src.slides import markdown_presentation
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
@@ -15,14 +15,18 @@ parser.add_argument('markdown', help='Input Markdown file')
 parser.add_argument('--html_title',  default="")
 parser.add_argument('--html_author', default="")
 parser.add_argument('--html_desc',   default="")
-parser.add_argument('--quiet',    action='store_false', 
-                    default=True, dest='verbose',
-                    help='Tells when LaTeX is being called')
+parser.add_argument('--verbose', '-v', action='store_true', 
+                    default=False, dest='verbose',
+                    help='Logging information')
 parser.add_argument('--prettify', action='store_true', 
                     default=False, help="html output is prettified")
-parser.add_argument('--summary', action='store_true', default=False)
-parser.add_argument('--output',help='Output html file, \
-if none defaults to input.html', default="")
+msg = "Output html file, if none defaults to [markdown input].html"
+parser.add_argument('--output',help=msg, default="")
+cmdline_args = parser.parse_args()
+
+# Start the logger
+if cmdline_args.verbose: 
+    logging.root.setLevel(logging.INFO)
 
 # See README.md in the reveal.js folder for what these options do 
 # (default values); note the transition value needs to be in quotes ""
@@ -61,14 +65,14 @@ reveal_init={
     'rollingLinks': 'false'
     }
 
+# Load reveal arguments if present
 f_reveal_json_args = "reveal_options.json"
 if os.path.exists(f_reveal_json_args):
     import json
+
     with open(f_reveal_json_args) as FIN:
         js = json.load(FIN)
     reveal_init.update(js)
-
-cmdline_args = parser.parse_args()
 
 if not cmdline_args.output:
     cmdline_args.output = cmdline_args.markdown.split('.')[0] + '.html'
@@ -115,6 +119,8 @@ with open(cmdline_args.output, 'w') as FOUT:
         soup = bs4.BeautifulSoup(final_html)
         encoded_html = soup.prettify().encode('utf8')
         FOUT.write(encoded_html)
+
+logging.info("{} created".format(cmdline_args.output))
 
 
 # Copy dependencies
