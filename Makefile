@@ -1,10 +1,17 @@
 all:
 	@echo pass
 
-build_reveal_js:
-	git submodule add https://github.com/hakimel/reveal.js.git reveal.js
+build_deps:
+	make build_reveal.js
 	git submodule init 
 	git submodule update
+
+build_reveal.js:
+	-git submodule add https://github.com/hakimel/reveal.js.git reveal.js
+
+demo:
+	python md2reveal.py demo.md --output demo.html
+	@echo "demo.html created"
 
 
 commit:
@@ -23,5 +30,4 @@ clean:
 	find . -name "*~" | xargs -I {} rm {}
 	find . -name "\#" | xargs -I {} rm {}
 	find . -name "*.pyc" | xargs -I {} rm {}
-	rm -rf $(target_folder)/css talks/js
 
