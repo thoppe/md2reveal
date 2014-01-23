@@ -115,6 +115,7 @@ if local_dir not in script_dir:
 
 target_dir = script_dir[len(local_dir):]
 f_latex_css = os.path.join(target_dir, "css/latex_style.css")
+f_latex_css = f_latex_css.lstrip("/")
 header_args["f_latex_css"] = f_latex_css
 
 final_html = header.format(**header_args)
