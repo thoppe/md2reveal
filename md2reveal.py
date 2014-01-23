@@ -122,15 +122,3 @@ with open(cmdline_args.output, 'w') as FOUT:
 
 logging.info("{} created".format(cmdline_args.output))
 
-
-# Copy dependencies
-import shutil
-target_directories = ["css"]
-for T in target_directories:
-
-    if not os.path.exists(T):
-        local_target    = os.path.join(local_dir, T)    
-        absolute_target = os.path.join(script_dir,T)
-        
-        print "# Copying {} to local directory {}".format(T, local_dir)
-        shutil.copytree(absolute_target, local_target)
