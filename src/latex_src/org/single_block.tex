@@ -1,13 +1,32 @@
 \documentclass[]{article}
 \usepackage{amsmath}
 \usepackage{amsfonts}
-%\documentclass[]{standalone}
-%\usepackage[]{graphicx}
-%\usepackage[margin=0in, paperwidth=30in, paperheight=20in]{geometry}
-%\usepackage{fontspec}
-%\usepackage{layouts}
-%\usepackage{rotating}
-%\usepackage[normalem]{ulem}
+
+% Convenience functions
+\newcommand{\B}[1]{ {\bf #1} }      	% Bold text for matrices
+\newcommand{\Z}{\mathcal{Z}}		% Partition function
+\newcommand{\HAM}{\mathcal{H}}		% Hamiltonian
+\newcommand{\qp}[0]{(\B{q},\B{p})}      % Cannonical variables (q,p) 
+\newcommand{\pfrac}[2]{\frac{\partial #1}{\partial #2}} % partial 1 /partial 2 
+\newcommand{\ket}[1]  {\left | \, #1 \right \rangle}	% bra-ket notation
+\newcommand{\abs}[1]{\left\vert #1 \right\vert}		% vert bars for averages
+
+ % taller vert bars for the norm
+\newcommand{\norm}[1]{\left\Vert #1 \right\Vert}
+
+% ex. evaluating the int. at its limits
+\newcommand{\evalat}[1]{\left. #1 \right \vert}	 
+
+ % Useful for piecewise functions
+\newcommand{\piecewisebrace}[1]{\left \{ #1 \right .}
+
+\newcommand{\set}[1]{\left\{ #1 \right\}}	% squigle brackets for sets
+\newcommand{\avg}[1]{\left< #1 \right>}		% angle brackets for averages
+\newcommand{\paren}[1]{\left( #1 \right)}	% grows parentheses ()
+\newcommand{\brackets}[1]{\left[ #1 \right]}	% grows square brackets []
+\newcommand{\braces}[1]{\left \{ #1 \right \}}  % grows braces {}
+
+\newcommand{\chem}[1]{\ensuremath{\mathrm{#1}}} % Chemical formula
 
 %
 % KEY_INCLUDES
