@@ -191,7 +191,10 @@ class markdown_multiline(object):
                          code_marker  | quote_box_marker |
                          ulist_marker | olist_marker)
 
-        line_text    = Group(OneOrMore(Word(printables)))
+        unicodePrintables = u''.join(unichr(c) for c in xrange(65536) 
+                                     if not unichr(c).isspace())
+
+        line_text    = Group(OneOrMore(Word(unicodePrintables)))
         regular_line = (~prefix_marker + ~option_block + ~code_line
                          + line_text + LineEnd().suppress())
 
