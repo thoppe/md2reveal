@@ -9,24 +9,42 @@
 .reveal svg.latexSVG {
     margin:0px;
     background-color:transparent; 
-    vertical-align: top;
+    vertical-align: baseline;
     border:none;
     box-shadow:none;
-    height:1.0em;
+    height:0.8em;
     margin-right:.1em;
     margin-left :.1em;
     max-width: 100%;
     fill: currentColor;
     stroke: currentColor;
+    overflow:hidden;
 }
 
 /* Special alignment for large equations, disabled for now */
-/*
-.reveal h1 .latexSVG  {
+.reveal h1 svg.latexSVG,
+.reveal h2 svg.latexSVG,
+.reveal h3 svg.latexSVG,
+.reveal h4 svg.latexSVG,
+.reveal h5 svg.latexSVG,
+.reveal h6 svg.latexSVG
+{
+    padding:0;
+    margin:0;
     vertical-align:middle;
+    height:1em;
 }
-*/
 
+
+.reveal li {
+    list-style-type: none;
+}
+
+.reveal .footnote {
+    font-size:80%;
+    line-height:1.25;
+    margin: 0;
+}
 
 .lowercase {
     text-transform: lowercase;

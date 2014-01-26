@@ -44,6 +44,8 @@ def process_image(img):
     image_class_names = []
     options = [x.split(':') for x in img['options']]
 
+    if not options: return ""
+
     # Fix any options with only name
     options  = [x if len(x)==2 else (x[0],None) for x in options]
 
