@@ -76,6 +76,7 @@ if os.path.exists(f_reveal_json_args):
 
 if not cmdline_args.output:
     cmdline_args.output = cmdline_args.markdown.split('.')[0] + '.html'
+    cmdline_args.output = os.path.basename(cmdline_args.output)
         
 script_name = __file__
 script_dir  = os.path.dirname(os.path.realpath(script_name))
