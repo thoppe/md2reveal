@@ -71,8 +71,6 @@ class markdown_presentation(object):
         s = []
         if self.background_img:
             s.append('data-background="%s"'%self.background_img)
-        else:
-            s.append('data-background=""')
         if self.background_trans:
             s.append('data-background-transition="%s"'%self.background_trans)
         # Force none transistion if nothing selected      
