@@ -1,6 +1,6 @@
 from pyparsing import *
 from markdown_slide import markdown_multiline
-from markdown_slide import brackets
+from markdown_slide import brackets, paren
 
 def match_at_least_n(token,n):
     val = Literal(token)
@@ -15,10 +15,17 @@ class markdown_presentation(object):
         sid = Optional(brackets)("slide_id") 
         sid.setParseAction(self.process_slide_id)
 
+        self.background_img   = ""
+        self.background_trans = ""
+        self.background_size  = ""
+        img_g   = Literal("!").suppress() + paren
+        backimg = Optional(img_g)("background")
+        backimg.setParseAction(self.process_background)
+
         mark_sep = match_at_least_n("=",4)
-        marker_V = Combine(mark_sep + match_at_least_n("*",1)) + sid
+        marker_V = Combine(mark_sep + match_at_least_n("*",1)) + sid + backimg
         marker_P = Combine(mark_sep + match_at_least_n("+",1)) 
-        marker_H = (~(marker_V|marker_P) + mark_sep) + sid
+        marker_H = (~(marker_V|marker_P) + mark_sep) + sid + backimg
 
         h_block = Combine(OneOrMore(~marker_H + 
                                      SkipTo(LineEnd(),include=True)))
@@ -48,12 +55,36 @@ class markdown_presentation(object):
             self.slide_id_name = tokens["slide_id"]
         return None
 
+    def process_background(self, tokens):
+        # Example !(myimg.png 90% zoom)
+        if "background" in tokens:
+            vals = tokens["background"][0].split(' ')
+            if len(vals)>0:
+                self.background_img   = vals[0]
+            if len(vals)>1:
+                self.background_size  = vals[1]
+            if len(vals)>2:
+                self.background_trans = vals[2]
+        return None
+
+    def get_slide_background(self):
+        s = []
+        if self.background_img:
+            s.append('data-background="%s"'%self.background_img)
+        if self.background_size:
+            s.append('data-background-size="%s"'%self.background_size)
+        if self.background_trans:
+            s.append('data-background-transition="%s"'%self.background_trans)
+        else:
+            s.append('data-background-transition="none"')
+        # Force none transistion if nothing selected      
+        return ' '.join(s)
+
     def get_slide_name(self):
         if self.slide_id_name:
             return 'id="{}"'.format(self.slide_id_name)
         return ""
         
-
     def process_h_block(self, tokens):
         # Take the first token a replace the tabs to four spaces
         val = tokens.pop().replace('\t','    ')
@@ -74,7 +105,10 @@ class markdown_presentation(object):
         val = self.slide_grammar(val.strip())
 
         text = '<section class="vertical-slide" {}>\n{}\n</section>'
-        opts = self.get_slide_name()
+
+        opts = ' '.join([self.get_slide_name(), self.get_slide_background()])
+        print opts
+
         return text.format(opts, val)
 
     def process_p_block(self, tokens):

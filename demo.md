@@ -1,7 +1,7 @@
 {"theme":"night.css"}
 
 # md2reveal
-python tool to convert extended markdown to reveal.js
+[python tool](https://github.com/thoppe/md2reveal) convert extended markdown to reveal.js
 
 ==== [formating]
 
@@ -35,4 +35,6 @@ _formating_ in *action!*
 	
 For example [google](https://www.google.com), 
 or [formating page](#/formating)
+
+====* [ZoomCC_Slide] !(cc.svg 30% zoom)
 
