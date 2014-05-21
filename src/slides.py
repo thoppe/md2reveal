@@ -71,13 +71,15 @@ class markdown_presentation(object):
         s = []
         if self.background_img:
             s.append('data-background="%s"'%self.background_img)
-        if self.background_size:
-            s.append('data-background-size="%s"'%self.background_size)
+        else:
+            s.append('data-background=""')
         if self.background_trans:
             s.append('data-background-transition="%s"'%self.background_trans)
+        # Force none transistion if nothing selected      
         else:
             s.append('data-background-transition="none"')
-        # Force none transistion if nothing selected      
+        if self.background_size:
+            s.append('data-background-size="%s"'%self.background_size)
         return ' '.join(s)
 
     def get_slide_name(self):
