@@ -106,8 +106,8 @@ class markdown_presentation(object):
 
         text = '<section class="vertical-slide" {}>\n{}\n</section>'
 
-        opts = ' '.join([self.get_slide_name(), self.get_slide_background()])
-        print opts
+        opts = ' '.join([self.get_slide_name(), 
+                         self.get_slide_background()])
 
         return text.format(opts, val)
 
