@@ -65,6 +65,8 @@ class markdown_presentation(object):
                 self.background_size  = vals[1]
             if len(vals)>2:
                 self.background_trans = vals[2]
+        else:
+            self.background_img = ""
         return None
 
     def get_slide_background(self):
