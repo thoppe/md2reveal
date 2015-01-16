@@ -3,7 +3,7 @@ import numpy as np
 from svg2.parser import parse_path
 import ast
 import random, string
-
+import logging
 
 def random_id_gen(N=10):
     return ''.join([random.choice(string.ascii_uppercase) 
@@ -16,7 +16,7 @@ class bounding_box(object):
         self.x0,self.y0 =  np.inf, np.inf
         self.x1,self.y1 = -np.inf, -np.inf
 
-        if input_points is None:
+        if input_points is not None:
             self.update(input_points)
     
 
@@ -135,7 +135,7 @@ def clean_soup(soup):
     
 
 def svg_crop(soup):
-           
+
     clean_soup(soup)
 
     box,BBOX = get_SVG_bounding_box(soup)
@@ -179,6 +179,10 @@ def svg_crop(soup):
     for use_symbol in soup.svg.findAll("use"):
         iden = use_symbol["xlink:href"][1:]
         use_symbol["xlink:href"] = "#" + symbol_map[iden]
+
+    # Adjust the final width and height
+    del soup.svg["height"]
+    soup.svg["width"] = "100%"
 
     return soup.svg
 
