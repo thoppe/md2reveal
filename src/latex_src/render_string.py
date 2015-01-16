@@ -66,6 +66,7 @@ def build_tex_item(text, filename_only=False, debug=False):
             
 
 def render_text(text,debug):
+
     print "# Rendering", text
     f_tex_input = 'target.tex'
    
@@ -79,6 +80,7 @@ def render_text(text,debug):
         # Compile the TeX with XeLaTex
         cmd  = "pdflatex -halt-on-error %s"
         args = (f_tmp_tex,)
+
         stdout, stderr = shell(cmd % args)
         tex_errors = filter_tex_errors(stdout)
 
@@ -93,7 +95,7 @@ def render_text(text,debug):
         args = (f_pdf, f_svg)
         stdout, stderr = shell(cmd % args)
         if stderr: raise RuntimeError(stderr)
-        
+
         # Crop to the bounding box
         cmd  = "python %s/svg_crop.py %s %s"
         args = (scriptpath, f_svg, f_svg)
@@ -102,7 +104,8 @@ def render_text(text,debug):
             os.system('bash')
 
         stdout, stderr = shell(cmd % args)             
-        if stderr: raise RuntimeError(stderr)
+        if stderr: 
+            logging.critical(stderr)
 
         # Find the baseline
         # baseline = extract_baseline(f_svg)

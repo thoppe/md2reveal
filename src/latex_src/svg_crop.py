@@ -16,7 +16,7 @@ class bounding_box(object):
         self.x0,self.y0 =  np.inf, np.inf
         self.x1,self.y1 = -np.inf, -np.inf
 
-        if input_points != None:
+        if input_points is None:
             self.update(input_points)
     
 
