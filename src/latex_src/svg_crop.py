@@ -181,8 +181,8 @@ def svg_crop(soup):
         use_symbol["xlink:href"] = "#" + symbol_map[iden]
 
     # Adjust the final width and height
-    del soup.svg["height"]
-    soup.svg["width"] = "100%"
+    del soup.svg["width"]
+    soup.svg["height"] = "100%"
 
     return soup.svg
 
