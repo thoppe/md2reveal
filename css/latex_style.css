@@ -35,6 +35,16 @@
     height:1.25em;
 }
 
+.reveal .reference_footnote {
+    float:left;
+    border:0; padding:0; margin:0;
+    position:fixed;
+    bottom:0%; right:0%;
+
+    font-size:60%;
+
+}
+
 
 .reveal li {
     list-style-type: none;

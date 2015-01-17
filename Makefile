@@ -1,5 +1,5 @@
 all:
-	@echo pass
+	@make demo
 demo:
 	python md2reveal.py demo.md --output demo.html --verbose
 

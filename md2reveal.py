@@ -32,10 +32,9 @@ if cmdline_args.verbose:
 # (default values); note the transition value needs to be in quotes ""
 
 reveal_init={
-    'width':960,
-    'height':700,
-    #'width':400,
-    #'height':900,
+    'width':1200,
+    'height':900,
+
     'margin': 0.05,
     'minScale': 0.2,
     'maxScale': 1.2,

@@ -305,10 +305,15 @@ class markdown_multiline(object):
             text = r"<div display='inline' align='left'>{}</div>".format(text)
             header_pop = True
 
+        if "&&" in header_marker:
+            text = '<div class="reference_footnote">{}</div>'
+            header_pop = True
+
         if header_pop: 
-            tokens[0][0] = tokens[0][0].lstrip("#|")
+            tokens[0][0] = tokens[0][0].lstrip("#|&")
             if not tokens[0][0]: del tokens[0][0]
         s = _global_markdown_line(' '.join(tokens[0]))
+
         return text.format(s)
 
     def process_empty_line(self,s,loc,tokens):

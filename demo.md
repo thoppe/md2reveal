@@ -1,7 +1,7 @@
 {"theme":"night.css"}
 
 # md2reveal
-[python tool](https://github.com/thoppe/md2reveal) convert extended markdown to reveal.js
+[python tool](https://github.com/thoppe/md2reveal) to convert extended markdown to reveal.js
 
 ==== [formating]
 
@@ -29,12 +29,13 @@ _formating_ in *action!*
 	!(cc.svg) <<width:200>> <<transparent>>
 !(cc.svg) <<width:200>> <<transparent>>
 
-
-### links
-	[link text](link src)
+### links & footnotes
+    [link text](link src)
+    && Footnote text
 	
-For example [google](https://www.google.com), 
-or [formating page](#/formating)
+For example [google](https://www.google.com), or [formating page](#/formating)
+
+&& A really important footnote or reference!, [google](https://www.google.com)
 
 ====* [ZoomCC_Slide] !(cc.svg 30% zoom)
 
