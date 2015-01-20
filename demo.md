@@ -35,7 +35,7 @@ _formating_ in *action!*
 	
 For example [google](https://www.google.com), or [formating page](#/formating)
 
-&& A really important footnote or reference!, [google](https://www.google.com)
+&& A really important footnote or reference!, [google](https://www.google.com)<br>This spans two lines!
 
 ====* [ZoomCC_Slide] !(cc.svg 30% zoom)
 
