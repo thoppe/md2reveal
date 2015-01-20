@@ -1,7 +1,11 @@
 all:
 	@make demo
+
 demo:
 	python md2reveal.py demo.md --output demo.html --verbose
+
+view:
+	xdg-open demo.html
 
 commit:
 	@-make push

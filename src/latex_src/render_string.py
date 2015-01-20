@@ -96,7 +96,7 @@ def render_text(text,debug):
 
         # Convert to a SVG
         f_svg = f_pdf.replace('.pdf','.svg')
-        cmd = "pdftocairo -cropbox -svg %s %s"
+        cmd = "pdftocairo -svg %s %s"
         args = (f_pdf, f_svg)
         stdout, stderr = shell(cmd % args)
         if stderr: raise RuntimeError(stderr)
