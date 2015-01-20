@@ -78,8 +78,8 @@ def process_latex(s,loc,tokens):
         f_svg = build_tex_item(eq%latex_input, filename_only=True)
         with open(f_svg) as FIN:
             svg = FIN.read()
-    except:
-        print "Problem with", latex_input
+    except Exception as Ex:       
+        logging.warning("Could not render {}".format(latex_input))
         svg = eq
     return svg
 

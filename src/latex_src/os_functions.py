@@ -90,8 +90,10 @@ class temp_workspace(object):
 
     def __exit__(self, exc_type, exc_value, traceback):
         if exc_type:
-            logging.critical("%s in %s" % (exc_type,self.temp_dir))
-            logging.critical(traceback)
+            err_msg = exc_value.args[0] if exc_value.args else ""
+            vals = ("Temp workspace error",
+                    self.temp_dir,err_msg.strip())
+            logging.critical("{} in {}, {}".format(*vals))
 
         os.chdir(self.local_dir)
         shutil.rmtree(self.temp_dir)
@@ -110,10 +112,11 @@ class cache_result(object):
     with cache_result(name, f) as C:
         C(x) # will return f(x) as a string cached if possible
     '''
-    def __init__(self, cache_name, func, ext=''):
+    def __init__(self, cache_name, func, ext='', log_cache=True):
         self.name = cache_name
         self.func = func
         self.extension = ext
+        self.log_cache = log_cache
 
         # Crate the cache directory if it doesn't exist
         make_sure_path_exists(self.name)
@@ -135,7 +138,8 @@ class cache_result(object):
             force = True
 
         if not os.path.exists(self.f_save) or force:
-            logging.info("~(caching) %s %s"%(self.name, args))
+            if self.log_cache:
+                logging.info("~(caching) %s %s"%(self.name, args))
             result = self.func(*args)
             with open(self.f_save,'w') as FOUT:
                 FOUT.write(str(result))
@@ -153,9 +157,9 @@ class cache_result(object):
 
     def __exit__(self, exc_type, exc_value, traceback):
         if exc_type:
-            print "Cache failure", self.local_dir
-            print traceback
-
+            err_msg = exc_value.args[0] if exc_value.args else ""
+            vals = ("Cache error, ",err_msg.strip())
+            logging.critical("{} {}".format(*vals))
 
 if __name__ == "__main__":
 

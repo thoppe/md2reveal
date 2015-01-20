@@ -57,8 +57,14 @@ def build_tex_item(text, filename_only=False, debug=False):
         logging.warning("Empty line found in textline render")
         return 2
 
-    with osf.cache_result('.render_cache', render_text,ext='.svg') as C:
-        logging.info("Rendering text [%s]"%org_text)
+    with osf.cache_result('.render_cache', 
+                          render_text,ext='.svg',
+                          log_cache=False) as C:
+        cut_text = org_text
+        # Truncate for logging 
+        if len(cut_text) > 40:
+            cut_text = org_text[:40] + "..."
+        logging.info("Rendering text {}".format(cut_text))
         svg_text = C(text,debug)
         if filename_only: return C.f_save       
         return svg_text
@@ -67,7 +73,6 @@ def build_tex_item(text, filename_only=False, debug=False):
 
 def render_text(text,debug):
 
-    print "# Rendering", text
     f_tex_input = 'target.tex'
    
     with osf.temp_workspace() as W:
