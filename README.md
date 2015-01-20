@@ -20,4 +20,7 @@ python tool to convert extended markdown to [reveal.js](https://github.com/hakim
 
 ## links
 	[link text](link src)
+
+## Reference footnotes
+	&& Footnote text
 	
