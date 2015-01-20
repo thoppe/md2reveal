@@ -114,7 +114,7 @@ if local_dir not in script_dir:
     logging.warning("Not running for a subdirectory, can mess up css")
 
 target_dir = script_dir[len(local_dir):]
-f_latex_css = os.path.join(target_dir, "css/latex_style.css")
+f_latex_css = os.path.join(target_dir, "css/md2reveal_style.css")
 f_latex_css = f_latex_css.lstrip("/")
 header_args["f_latex_css"] = f_latex_css
 

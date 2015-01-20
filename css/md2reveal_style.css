@@ -1,4 +1,27 @@
 /*********************************************
+  Image styles
+  Markdown example: !(foo.png)
+*********************************************/
+
+.reveal img {
+    max-height: 75%;
+}
+
+.reveal section img {
+    vertical-align:middle;
+}
+
+.reveal .inline_image {
+    display: inline;
+}
+
+.reveal .transparent_image  {
+    border: none;
+    background: none;
+    box-shadow: none;
+}
+
+/*********************************************
   LaTeX equations
   Markdown example: $x^2 = y + 2$
 *********************************************/
@@ -31,29 +54,6 @@
 }
 
 /*********************************************
-  Image styles
-  Markdown example: !(foo.png)
-*********************************************/
-
-.reveal img {
-    max-height: 75%;
-}
-
-.reveal section img {
-    vertical-align:middle;
-}
-
-.reveal .inline_image {
-    display: inline;
-}
-
-.reveal .transparent_image  {
-    border: none;
-    background: none;
-    box-shadow: none;
-}
-
-/*********************************************
   Footnotes [Markdown: &&]
   Markdown example: && Reference note
 *********************************************/
@@ -65,6 +65,7 @@
     bottom:0%; right:0%;
     font-size:60%;
     text-align: right;
+    line-height:110%;  /* slightly compressed */
 }
 
 /*********************************************
