@@ -38,7 +38,11 @@ def process_code_block(s, loc, tokens):
     return s.format(_CODE_LANUAGE, html)
 
 def process_image(img):
-    s = '<img class="{classname}" src="{src}" {arguments}>'
+    s = '''
+    <a href="{src}">
+    <img class="{classname}" src="{src}" {arguments}>
+    </a>
+    '''.strip()
 
     #image_class_names = ["large_image"]
     image_class_names = []
