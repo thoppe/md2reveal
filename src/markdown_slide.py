@@ -13,11 +13,10 @@ double_angles   = boxExpr('<<','>>','double_angles')
 
 _CODE_LANUAGE = "python"
 
-local_themes = (glob.glob("*.css") +
-                glob.glob("css/*.css") ) 
-packaged_themes = ["beige.css","default.css","night.css",
-                   "serif.css","sky.css","blood.css","moon.css",
-                   "simple.css","solarized.css"]
+local_themes    = (glob.glob("*.css") +
+                   glob.glob("css/*.css") ) 
+packaged_themes = glob.glob("reveal.js/css/theme/*.css")
+packaged_themes = [os.path.basename(x) for x in packaged_themes]
 
 # Only split on spaces, newlines are important
 ParserElement.setDefaultWhitespaceChars(" ")
@@ -243,7 +242,7 @@ class markdown_multiline(object):
             tokens.insert(-1,r"<br>")
 
         return tokens
-
+    
     def process_option_block(self, s,loc,tokens):
         text = '%s'%tokens[0]
         try:
@@ -253,33 +252,9 @@ class markdown_multiline(object):
             return ""
 
         return self.handle_options(options)
-
+    
     def handle_options(self, options):
-        theme_string = r'<link rel="stylesheet" href="%s" id="theme">'   
         output_str = []
-
-        if "theme" in options:
-            theme = str(options['theme'])
-            local_list = [os.path.basename(x) for x in local_themes]
-            
-            v = ""
-            if theme in local_list:
-                index = local_list.index(theme)
-                f_css = local_themes[index]
-                v = theme_string % f_css
-            elif theme in packaged_themes:
-                index = packaged_themes.index(theme)
-                rdest = "reveal.js/css/theme"
-                f_css = os.path.join(rdest,packaged_themes[index])
-                v = theme_string % f_css
-            elif os.path.exists(theme):
-                v = theme_string % theme
-            else:
-                logging.critical("Theme not found! %s"%theme)
-                logging.critical("Local themes: %s"%local_list)
-                logging.critical("Packaged themes: %s"%packaged_themes)
-            output_str.append(v)
-
 
         if "include_code" in options:
             f_code = options['include_code']
@@ -288,6 +263,9 @@ class markdown_multiline(object):
             v = "<pre><code>%s</code></pre>" % raw
             output_str.append(v)
 
+        if "theme" in options:
+            f_css, theme_html = process_theme(options["theme"])
+            output_str.append(theme_html)
 
         return "\n".join(output_str)
 
@@ -331,6 +309,47 @@ class markdown_multiline(object):
         # Join the paragraph tokens together
         sval = ''.join(tokens.paragraph)
         return "<p>\n{}</p>".format(sval)
+
+
+
+
+def get_theme_path(theme):
+    f_css = ""
+    local_list = [os.path.basename(x) for x in local_themes]
+
+    if theme in local_list:
+        index = local_list.index(theme)
+        f_css = local_themes[index]
+    elif theme in packaged_themes:
+        index = packaged_themes.index(theme)
+        rdest = "reveal.js/css/theme"
+        f_css = os.path.join(rdest,packaged_themes[index])
+    elif os.path.exists(theme):
+        f_css = theme
+    else:
+        msg = ("Theme '{}' not found. "
+               "Local themes {}. "
+               "Packaged thems {}")
+        msg = msg.format(theme,local_list, packaged_themes)
+        logging.warning(msg)
+
+    return f_css
+
+
+def process_theme(theme):
+
+    if not theme:
+        return "", ""
+
+    theme_string = r'''
+    <link rel="stylesheet" href="%s" id="theme">'''.strip()
+
+    f_css = get_theme_path(theme)
+
+    return f_css, theme_string%f_css
+
+
+
 
 
 if __name__ == "__main__":

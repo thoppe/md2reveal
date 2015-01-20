@@ -1,5 +1,3 @@
-{"theme":"night.css"}
-
 # md2reveal
 [python tool](https://github.com/thoppe/md2reveal) to convert extended markdown to reveal.js
 

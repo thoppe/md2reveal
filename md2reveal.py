@@ -1,6 +1,6 @@
 import os, sys, argparse, logging
 from src.slides import markdown_presentation
-
+from src.markdown_slide import process_theme # FIX LOC
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # Command-line parse
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
@@ -65,12 +65,18 @@ reveal_init={
     }
 
 # Load reveal arguments if present
+theme = None
 f_reveal_json_args = "reveal_options.json"
 if os.path.exists(f_reveal_json_args):
     import json
 
     with open(f_reveal_json_args) as FIN:
         js = json.load(FIN)
+
+    # Pop out the theme if present
+    if "theme" in js:
+        theme = js.pop("theme")
+
     reveal_init.update(js)
 
 if not cmdline_args.output:
@@ -104,6 +110,10 @@ for i,j in reveal_init.iteritems():
 header_args = vars(cmdline_args)
 header_args["reveal_init_args"] = reveal_init_val
 header_args["html_content"]     = slide_html
+
+f_css, link_html = process_theme(theme)
+header_args["theme_link"] = link_html
+
 
 f_dependencies = os.path.join(script_dir, "org", "dependencies.js")
 with open(f_dependencies) as FIN:
