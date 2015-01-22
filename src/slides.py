@@ -1,6 +1,7 @@
 from pyparsing import *
-from markdown_slide import markdown_multiline
-from markdown_slide import brackets, paren
+import logging
+from markdown_slide import markdown_multiline, option_iterator
+from markdown_slide import brackets, paren, double_angles
 
 def match_at_least_n(token,n):
     val = Literal(token)
@@ -18,14 +19,22 @@ class markdown_presentation(object):
         self.background_img   = ""
         self.background_trans = ""
         self.background_size  = ""
+        self.data_trans = ""
+
         img_g   = Literal("!").suppress() + paren
         backimg = Optional(img_g)("background")
         backimg.setParseAction(self.process_background)
 
+        options = double_angles('options') 
+        options.setParseAction(self.process_slide_options)
+
         mark_sep = match_at_least_n("=",4)
-        marker_V = Combine(mark_sep + match_at_least_n("*",1)) + sid + backimg
+        marker_V = (Combine(mark_sep + match_at_least_n("*",1)) 
+                    + sid + backimg + Optional(options))
+
         marker_P = Combine(mark_sep + match_at_least_n("+",1)) 
-        marker_H = (~(marker_V|marker_P) + mark_sep) + sid + backimg
+        marker_H = ((~(marker_V|marker_P) + mark_sep) 
+                    + sid + backimg + Optional(options))
 
         h_block = Combine(OneOrMore(~marker_H + 
                                      SkipTo(LineEnd(),include=True)))
@@ -69,17 +78,36 @@ class markdown_presentation(object):
             self.background_img = ""
         return None
 
+    def process_slide_options(self, tokens):
+        if "options" in tokens:
+            for key, val in option_iterator(tokens["options"]):
+                if key == "transistion":
+                    self.data_trans = val
+                else:
+                    msg = "Unknown slide option {}/{}".format(key,val)
+                    logging.warning(msg)
+
+        return None
+
     def get_slide_background(self):
         s = []
+
+        if self.data_trans:
+            html = 'data-transition="%s"'%self.data_trans
+            s.append(html)
+
+        if self.background_size:
+            s.append('data-background-size="%s"'%self.background_size)
+
         if self.background_img:
             s.append('data-background="%s"'%self.background_img)
+
         if self.background_trans:
             s.append('data-background-transition="%s"'%self.background_trans)
         # Force none transistion if nothing selected      
-        else:
-            s.append('data-background-transition="none"')
-        if self.background_size:
-            s.append('data-background-size="%s"'%self.background_size)
+        #else:
+        #    s.append('data-background-transition="none"')
+
         return ' '.join(s)
 
     def get_slide_name(self):
@@ -94,6 +122,7 @@ class markdown_presentation(object):
         # Format the inner vertical slide blocks
         val = self.vg.transformString(val)
         text = '<section class="vertical-stack">\n{}\n</section>'
+
         return text.format(val)
 
     def process_v_block(self, tokens):
@@ -106,7 +135,7 @@ class markdown_presentation(object):
         # Apply the markdown grammar
         val = self.slide_grammar(val.strip())
 
-        text = '<section class="vertical-slide" {}>\n{}\n</section>'
+        text = '<section {} class="vertical-slide">\n{}\n</section>'
 
         opts = ' '.join([self.get_slide_name(), 
                          self.get_slide_background()])

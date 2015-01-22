@@ -1,7 +1,7 @@
 # md2reveal
 [python tool](https://github.com/thoppe/md2reveal) to convert extended markdown to reveal.js
 
-==== [formating]
+==== [formating]  
 
 ## slide control
 	====  horizontal slide
@@ -20,7 +20,7 @@
 _formating_ in *action!*
 ## $\rho \left(\frac{\partial \mathbf{v}}{\partial t} + \mathbf{v} \cdot \nabla \mathbf{v} \right) = -\nabla p + \nabla \cdot\boldsymbol{\mathsf{T}} + \mathbf{f}$
 
-====*
+====* <<transistion:concave>>
 ### images
 	!(image src)[optional image link] <<options>>
     ...

@@ -6,6 +6,7 @@ python tool to convert extended markdown to [reveal.js](https://github.com/hakim
 	====* vertical slide
 	====+ slide pause
 	==== [name] named slide, useful for linking
+    ====* <<transistion:none>> custom slide transistions
 
 ## text formatting
     #      h1     (headers) 
