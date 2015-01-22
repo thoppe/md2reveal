@@ -92,8 +92,6 @@ def process_image(img):
     cls  = ' '.join(image_class_names)
     html = html.format(src=img['src'], classname=cls, arguments=arg_text)
 
-    print html
-
     if "link" in img:
         link_text = '<a href={link}>{html_img}</a>'
         html = link_text.format(link=img['link'],
