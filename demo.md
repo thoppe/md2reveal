@@ -20,12 +20,21 @@
 _formating_ in *action!*
 ## $\rho \left(\frac{\partial \mathbf{v}}{\partial t} + \mathbf{v} \cdot \nabla \mathbf{v} \right) = -\nabla p + \nabla \cdot\boldsymbol{\mathsf{T}} + \mathbf{f}$
 
-====* <<transistion:concave>>
+====* 
 ### images
 	!(image src)[optional image link] <<options>>
     ...
 	!(cc.svg) <<width:200; transparent>>
 !(cc.svg) <<width:200; transparent>>
+
+### movies
+	(image src.m4v)[optional image link] <<options>>
+    ...
+	!(small.m4v) <<height:200>>
+!(small.m4v) <<height:200>>
+
+
+====*
 
 ### links & footnotes
     [link text](link src)

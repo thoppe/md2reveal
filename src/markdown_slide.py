@@ -50,12 +50,24 @@ def option_iterator(option_string):
         yield key, value
 
 def process_image(img):
-    s = '''
+    img_html = '''
     <a href="{src}">
     <img class="{classname}" src="{src}" {arguments}>
     </a>
     '''.strip()
 
+    video_html = '''
+    <video autoplay loop {arguments}>  
+    <source src="{src}" type="video/mp4"> 
+    </video>
+    '''.strip()
+    
+    extension = os.path.splitext(img["src"])[1].split('.')[-1]
+
+    if extension in ["mp4", "m4v"]:
+        html = video_html
+    else:
+        html = img_html
 
     # Known img arguments
     recognized_opts = "width", "height"
@@ -78,7 +90,9 @@ def process_image(img):
     arg_text = ' '.join(arg_text)
     
     cls  = ' '.join(image_class_names)
-    html = s.format(src=img['src'], classname=cls, arguments=arg_text)
+    html = html.format(src=img['src'], classname=cls, arguments=arg_text)
+
+    print html
 
     if "link" in img:
         link_text = '<a href={link}>{html_img}</a>'
