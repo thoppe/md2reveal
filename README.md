@@ -17,6 +17,11 @@ python tool to convert extended markdown to [reveal.js](https://github.com/hakim
 
 ## images
 	!(image src)[optional image link] <<options>>
+    
+Image options can be combined with a semicolon, all options listed below
+
+	!(foo.svg) <<width:400; height:200; transparent>>
+
 
 ## links
 	[link text](link src)

@@ -1,5 +1,5 @@
 from latex_src.render_string import build_tex_item
-import json, logging, glob, os
+import json, logging, glob, os, cgi
 from pyparsing import *
 
 # Useful names
@@ -33,6 +33,7 @@ def process_left_justify(s,loc,tokens):
 
 def process_code_block(s, loc, tokens):
     html = '\n'.join(tokens['code_block']).rstrip()
+    html = cgi.escape(html, quote=True)
     s    = '<pre><code class={}>{}</code></pre>'
     return s.format(_CODE_LANUAGE, html)
 
@@ -272,8 +273,9 @@ class markdown_multiline(object):
         if "include_code" in options:
             f_code = options['include_code']
             with open(f_code) as FIN:
-                raw = FIN.read()
-            v = "<pre><code>%s</code></pre>" % raw
+                raw  = FIN.read()
+                html = cgi.escape(raw, quote=True)
+            v = "<pre><code>%s</code></pre>" % html
             output_str.append(v)
 
         if "theme" in options:
