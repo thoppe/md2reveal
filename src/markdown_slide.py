@@ -36,6 +36,18 @@ def process_code_block(s, loc, tokens):
     s    = '<pre><code class={}>{}</code></pre>'
     return s.format(_CODE_LANUAGE, html)
 
+def option_iterator(option_string):
+    option_key    = Word(alphanums+'_')("key")
+    option_value  = Word(alphanums+'"_')("value")
+    option_marker = Literal(":").suppress()
+    option_keyval = Group(option_key + Optional(option_marker + option_value))
+    option_grammar = delimitedList(option_keyval, delim=";")
+    
+    for opt in option_grammar.parseString(option_string):
+        key = opt["key"]
+        value = opt["value"] if "value" in opt else True
+        yield key, value
+
 def process_image(img):
     s = '''
     <a href="{src}">
@@ -43,22 +55,23 @@ def process_image(img):
     </a>
     '''.strip()
 
-    #image_class_names = ["large_image"]
-    image_class_names = []
-    options = [x.split(':') for x in img['options']]
 
-    # Fix any options with only name
-    options  = [x if len(x)==2 else (x[0],None) for x in options]
-
-    # Parse a limited subset of options
+    # Known img arguments
     recognized_opts = "width", "height"
-    args = {}
-    for key,val in options:
+    args, image_class_names = {}, []
+
+    for key,val in option_iterator(img["options"][0]):
+        key = key.lower()
+
         if key in recognized_opts:
             args[key] = val
 
-        if key == 'transparent':
-            image_class_names.append("transparent_image")    
+        elif key == 'transparent':
+            image_class_names.append("transparent_image")
+
+        else:
+            msg = "Unknown image option {}".format(key)
+            logging.warning(msg)
 
     arg_text = ['{}="{}"'.format(key,val) for key,val in args.items()]
     arg_text = ' '.join(arg_text)
@@ -119,7 +132,7 @@ class markdown_line(object):
         latex       = QuotedString("$")('latex')
         inline_link = (brackets('text')+paren('url'))('inline_link')
         inline_code = QuotedString("`")('inline_code')
-        options = Group(OneOrMore(double_angles))('options') 
+        options = double_angles('options') 
 
         tokens = (strong | emph | latex | 
                   inline_code | inline_link | options)

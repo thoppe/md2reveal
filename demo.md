@@ -24,8 +24,8 @@ _formating_ in *action!*
 ### images
 	!(image src)[optional image link] <<options>>
     ...
-	!(cc.svg) <<width:200>> <<transparent>>
-!(cc.svg) <<width:200>> <<transparent>>
+	!(cc.svg) <<width:200; transparent >>
+!(cc.svg) <<width:200; transparent>>
 
 ### links & footnotes
     [link text](link src)
