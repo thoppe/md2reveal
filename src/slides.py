@@ -1,5 +1,5 @@
 from pyparsing import *
-import logging
+import logging, json
 from markdown_slide import markdown_multiline, option_iterator
 from markdown_slide import brackets, paren, double_angles
 
@@ -36,12 +36,12 @@ class markdown_presentation(object):
         marker_H = ((~(marker_V|marker_P) + mark_sep) 
                     + sid + backimg + Optional(options))
 
-        h_block = Combine(OneOrMore(~marker_H + 
+        h_block = Combine(OneOrMore(~marker_H + ~options +
                                      SkipTo(LineEnd(),include=True)))
         h_block.setParseAction(self.process_h_block)
         self.hg = delimitedList(h_block, delim=marker_H)
 
-        v_block = Combine(OneOrMore(~marker_V + 
+        v_block = Combine(OneOrMore(~marker_V + ~options +
                                      SkipTo(LineEnd(),include=True)))
         v_block.setParseAction(self.process_v_block)
         self.vg = delimitedList(v_block, delim=marker_V)
@@ -52,8 +52,7 @@ class markdown_presentation(object):
         self.pg = delimitedList(p_block, delim=marker_P)
 
         self.slide_grammar = markdown_multiline()
-        self.grammar = self.hg
-       
+        self.grammar = self.hg      
 
     def process_slide_id(self, tokens):
         # If a slide_id is found, set this variable and 
@@ -159,7 +158,38 @@ class markdown_presentation(object):
         return html.format(val)
 
     def __call__(self, text):
+
+        # Preprocess any includes
+        ROL   = SkipTo(LineEnd().suppress(),include=True)
+        include_block = (QuotedString(quoteChar='{', 
+                                      endQuoteChar='}',
+                                      multiline=True,
+                                      unquoteResults=False)
+                         + ROL.suppress())
+        other_line = Combine(SkipTo(LineEnd(),include=True))
+        include_grammar = OneOrMore(include_block("include")
+                                    |other_line).leaveWhitespace()
+        include_grammar.setParseAction(process_include_block)
+        text = include_grammar.transformString(text)
+
+        # Process the slide grammar
         return self.grammar.transformString(text)
+
+def process_include_block(s,loc,tokens):
+    output = []
+    for line in tokens:
+        if "include" in line:
+            try:
+                options = json.loads(line)
+                with open(options["include"]) as FIN:
+                    line = FIN.read()
+
+            except Exception as Ex:
+                msg = "Can't convert option to JSON {}, {}"
+                logging.critical(msg.format(line, Ex))
+        output.append(line)
+    return ''.join(output)
+
 
 if __name__ == "__main__":
 

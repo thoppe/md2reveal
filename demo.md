@@ -33,6 +33,9 @@ _formating_ in *action!*
 	!(small.m4v) <<height:200>>
 !(small.m4v) <<height:200>>
 
+====*
+
+{"include":"include_example.md"}
 
 ====*
 

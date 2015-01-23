@@ -198,11 +198,11 @@ class markdown_multiline(object):
                         + Optional(brackets)('link') + ws
                         + ws + options + ROL).leaveWhitespace()
 
-        option_block = (QuotedString(quoteChar='{', 
-                                    endQuoteChar='}',
-                                    multiline=True,
-                                    unquoteResults=False)('options') 
-                        + ROL.suppress())
+        #option_block = (QuotedString(quoteChar='{', 
+        #                            endQuoteChar='}',
+        #                            multiline=True,
+        #                            unquoteResults=False)('options') 
+        #                + ROL.suppress())
 
         quote_box_marker = Literal(">").suppress()
         quote_box_line = quote_box_marker + ROL
@@ -224,13 +224,15 @@ class markdown_multiline(object):
                                      if not unichr(c).isspace())
 
         line_text    = Group(OneOrMore(Word(unicodePrintables)))
-        regular_line = (~prefix_marker + ~option_block + ~code_line
+        regular_line = (~prefix_marker 
+                        #+ ~option_block 
+                        + ~code_line
                          + line_text + LineEnd().suppress())
 
         paragraph    = Group(OneOrMore(regular_line))("paragraph")  
 
         self.grammar = OneOrMore(empty_line      | 
-                                 option_block    |
+                                 #option_block    |
                                  image_line      |
                                  code_block      | 
                                  quote_box_block |
@@ -244,7 +246,7 @@ class markdown_multiline(object):
         line_text.setParseAction(self.process_line_text)
         image_line.setParseAction(process_image)
 
-        option_block.setParseAction(self.process_option_block)
+        #option_block.setParseAction(self.process_option_block)
 
         code_block.setParseAction(process_code_block)
         quote_box_block.setParseAction(process_quote_block)
@@ -269,32 +271,38 @@ class markdown_multiline(object):
 
         return tokens
     
-    def process_option_block(self, s,loc,tokens):
-        text = '%s'%tokens[0]
-        try:
-            options = json.loads(text)
-        except:
-            logging.critical("Can't convert option to JSON %s"%text)
-            return ""
-
-        return self.handle_options(options)
+    #def process_option_block(self, s,loc,tokens):
+    #    text = '%s'%tokens[0]
+    #    try:
+    #        options = json.loads(text)
+    #    except Exception as Ex:
+    #        msg = "Can't convert option to JSON {}, {}"
+    #        logging.critical(msg.format(text, Ex))
+    #        return ""
+    #
+    #    return self.handle_options(options)
     
-    def handle_options(self, options):
-        output_str = []
-
-        if "include_code" in options:
-            f_code = options['include_code']
-            with open(f_code) as FIN:
-                raw  = FIN.read()
-                html = cgi.escape(raw, quote=True)
-            v = "<pre><code>%s</code></pre>" % html
-            output_str.append(v)
-
-        if "theme" in options:
-            f_css, theme_html = process_theme(options["theme"])
-            output_str.append(theme_html)
-
-        return "\n".join(output_str)
+    #def handle_options(self, options):
+    #    output_str = []
+    #
+    #    if "include_code" in options:
+    #        f_code = options['include_code']
+    #        with open(f_code) as FIN:
+    #            raw  = FIN.read()
+    #            html = cgi.escape(raw, quote=True)
+    #        v = "<pre><code>%s</code></pre>" % html
+    #        output_str.append(v)
+    #
+    #    if "include" in options:
+    #        with open(options["include"]) as FIN:
+    #            raw = FIN.read()
+    #        print raw
+    #        output_str.append(raw)
+    #
+    #    if "theme" in options:
+    #        f_css, theme_html = process_theme(options["theme"])
+    #        output_str.append(theme_html)
+    #    return "\n".join(output_str)
 
 
     def process_line_text(self,s,loc,tokens):
