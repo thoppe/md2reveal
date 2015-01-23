@@ -81,7 +81,7 @@ class markdown_presentation(object):
     def process_slide_options(self, tokens):
         if "options" in tokens:
             for key, val in option_iterator(tokens["options"]):
-                if key == "transistion":
+                if key == "transition":
                     self.data_trans = val
                 else:
                     msg = "Unknown slide option {}/{}".format(key,val)
@@ -97,13 +97,17 @@ class markdown_presentation(object):
             s.append(html)
 
         if self.background_size:
-            s.append('data-background-size="%s"'%self.background_size)
+            s.append('data-background-size="%s"'
+                     %self.background_size)
 
         if self.background_img:
-            s.append('data-background="%s"'%self.background_img)
+            s.append('data-background="%s"'
+                     %self.background_img)
 
         if self.background_trans:
-            s.append('data-background-transition="%s"'%self.background_trans)
+            s.append('data-background-transition="%s"'
+                     %self.background_trans)
+
         # Force none transistion if nothing selected      
         #else:
         #    s.append('data-background-transition="none"')
