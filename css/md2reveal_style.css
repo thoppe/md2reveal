@@ -11,6 +11,14 @@
     vertical-align:middle;
 }
 
+.reveal video {
+    max-height: 75%;
+}
+
+.reveal section video {
+    vertical-align:middle;
+}
+
 .reveal .inline_image {
     display: inline;
 }
