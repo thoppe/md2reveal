@@ -166,11 +166,17 @@ class markdown_presentation(object):
                                       multiline=True,
                                       unquoteResults=False)
                          + ROL.suppress())
+        comment_line = (Literal("%") + ROL).suppress()
+
         other_line = Combine(SkipTo(LineEnd(),include=True))
-        include_grammar = OneOrMore(include_block("include")
-                                    |other_line).leaveWhitespace()
+        include_grammar = OneOrMore(
+            comment_line
+            |include_block("include")
+            |other_line).leaveWhitespace()
         include_grammar.setParseAction(process_include_block)
         text = include_grammar.transformString(text)
+        #print text
+        #exit()
 
         # Process the slide grammar
         return self.grammar.transformString(text)

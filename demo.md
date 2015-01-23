@@ -34,9 +34,7 @@ _formating_ in *action!*
 !(small.m4v) <<height:200>>
 
 ====*
-
 {"include":"include_example.md"}
-
 ====*
 
 ### links & footnotes
@@ -46,6 +44,12 @@ _formating_ in *action!*
 For example [google](https://www.google.com), or [formating page](#/formating)
 
 && A really important footnote or reference!, [google](https://www.google.com)<br>This spans two lines!
+
+### Comments in md slides
+    % This line won't be displayed below since it starts with a "%"
+
+% This line won't be displayed below since it starts with a "%"
+<br>
 
 ====* [ZoomCC_Slide] !(cc.svg 30% zoom)
 
