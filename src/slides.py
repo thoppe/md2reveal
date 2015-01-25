@@ -149,7 +149,6 @@ class markdown_presentation(object):
         html = "{}"
         if self.fragment_stack:
             html = '\n<div class="fragment">\n{}\n</div>'
-            #tokens[0] = tokens[0].lstrip('\n')
 
         self.fragment_stack += 1
 

@@ -73,7 +73,13 @@ def process_image(img):
     recognized_opts = "width", "height"
     args, image_class_names = {}, []
 
-    for key,val in option_iterator(img["options"][0]):
+    # Flatten out img["options"]
+    if img["options"]:
+        img["options"] = img["options"][0]
+    else:
+        img["options"] = ""
+    
+    for key,val in option_iterator(img["options"]):
         key = key.lower()
 
         if key in recognized_opts:
