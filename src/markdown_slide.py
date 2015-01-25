@@ -38,6 +38,9 @@ def process_code_block(s, loc, tokens):
     return s.format(_CODE_LANUAGE, html)
 
 def option_iterator(option_string):
+    if not option_string:
+        raise StopIteration
+
     option_key    = Word(alphanums+'_')("key")
     option_value  = Word(alphanums+'"_')("value")
     option_marker = Literal(":").suppress()
@@ -80,6 +83,7 @@ def process_image(img):
         img["options"] = ""
     
     for key,val in option_iterator(img["options"]):
+
         key = key.lower()
 
         if key in recognized_opts:
