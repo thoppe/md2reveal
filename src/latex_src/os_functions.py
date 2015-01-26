@@ -92,7 +92,7 @@ class temp_workspace(object):
         if exc_type:
             err_msg = exc_value.args[0] if exc_value.args else ""
             vals = ("Temp workspace error",
-                    self.temp_dir,err_msg.strip())
+                    self.temp_dir,err_msg)
             logging.critical("{} in {}, {}".format(*vals))
 
         os.chdir(self.local_dir)

@@ -1,6 +1,6 @@
 import os, sys, argparse, logging
 from src.slides import markdown_presentation
-from src.markdown_slide import process_theme # FIX LOC
+import src.markdown_slide
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # Command-line parse
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
@@ -18,6 +18,9 @@ parser.add_argument('--html_desc',   default="")
 parser.add_argument('--verbose', '-v', action='store_true', 
                     default=False, dest='verbose',
                     help='Logging information')
+parser.add_argument('--keep_equations', action='store_true', 
+                    default=False, 
+                    help='Do not render the equations to svg')
 parser.add_argument('--prettify', action='store_true', 
                     default=False, help="html output is prettified")
 msg = "Output html file, if none defaults to [markdown input].html"
@@ -63,6 +66,9 @@ reveal_init={
     'viewDistance':3,
     'rollingLinks': 'false'
     }
+
+# Set the global for keeping equations
+src.markdown_slide.keep_equations = cmdline_args.keep_equations
 
 # Load reveal arguments if present
 theme = None
@@ -111,9 +117,8 @@ header_args = vars(cmdline_args)
 header_args["reveal_init_args"] = reveal_init_val
 header_args["html_content"]     = slide_html
 
-f_css, link_html = process_theme(theme)
+f_css, link_html = src.markdown_slide.process_theme(theme)
 header_args["theme_link"] = link_html
-
 
 f_dependencies = os.path.join(script_dir, "org", "dependencies.js")
 with open(f_dependencies) as FIN:

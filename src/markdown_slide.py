@@ -21,6 +21,9 @@ packaged_themes = [os.path.basename(x) for x in packaged_themes]
 # Only split on spaces, newlines are important
 ParserElement.setDefaultWhitespaceChars(" ")
 
+# Global command to process equations or not, should be local
+keep_equations = False
+
 # Helper function, all quoted strings markers can be escaped with \
 def QString(quoteChar, escChar='\\'):
     return QuotedString(quoteChar, escChar=escChar)
@@ -110,6 +113,10 @@ def process_image(img):
     return html
 
 def process_latex(s,loc,tokens):
+
+    if keep_equations:
+        return u"${}$".format(' '.join(tokens))
+
     latex_input = tokens['latex']
     eq = r"\begin{align*}%s\end{align*}"
 

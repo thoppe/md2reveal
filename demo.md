@@ -20,6 +20,8 @@
 _formating_ in *action!*
 ## $\rho \left(\frac{\partial \mathbf{v}}{\partial t} + \mathbf{v} \cdot \nabla \mathbf{v} \right) = -\nabla p + \nabla \cdot\boldsymbol{\mathsf{T}} + \mathbf{f}$
 
+Small inline equation $B_2 = \int x dx$.
+
 ====* 
 ### images
 	!(image src)[optional image link] <<options>>
