@@ -29,8 +29,11 @@ basic_tex = r'''
 %s
 \end{document}'''.strip()
 
+script_name = __file__
+script_dir  = os.path.dirname(os.path.realpath(script_name))
+
 with temp_workspace() as W:
-    py_md2  = os.path.join(W.local_dir, "md2reveal.py")
+    py_md2  = os.path.join(script_dir, "md2reveal.py")
     md_file = os.path.join(W.local_dir, cmdline_args.md)
     f_html = os.path.join(W.temp_dir, "target.html")
 
