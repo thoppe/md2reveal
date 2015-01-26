@@ -64,7 +64,8 @@ with temp_workspace() as W:
             
             cmd = cmd_convert_to_png.format(f_img, f_name+'.png')
             os.system(cmd)
-            img["src"] = img["src"].replace('.svg','.png')
+            
+            img["src"] = f_name+'.png'
 
     with codecs.open(f_html, "w", "utf-8") as FOUT:
         FOUT.write(soup.prettify())
