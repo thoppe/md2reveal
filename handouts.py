@@ -13,7 +13,7 @@ cmdline_args = parser.parse_args()
 
 f_tex = "template.tex"
 f_tex_content = "content.tex"
-cmd_md2reveal = "python {} --keep_equations --prettify {} --output {}"
+cmd_md2reveal = "python {} --keep_equations {} --output {}"
 cmd_panddoc   = "pandoc -f html -t latex {} > {}"
 cmd_latex     = "pdflatex {}"
 
@@ -66,7 +66,7 @@ with temp_workspace() as W:
             img["src"] = img["src"].replace('.svg','.png')
 
     with open(f_html, 'w') as FOUT:
-        FOUT.write(soup.prettify())
+        FOUT.write(unicode(soup))
     
     os.system(cmd_panddoc.format(f_html,f_tex_content))
 
