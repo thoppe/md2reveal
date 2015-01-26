@@ -17,7 +17,7 @@ cmd_md2reveal = "python {} --keep_equations {} --output {}"
 cmd_panddoc   = "pandoc -f html -t latex {} > {}"
 cmd_latex     = "pdflatex {}"
 
-cmd_convert_svg_to_png = "convert -resize 75 {f}.svg {f}.png"
+cmd_convert_to_png = "convert -resize 75 {} {}"
 
 basic_tex = r'''
 \documentclass[a4paper, 10pt]{scrartcl}
@@ -49,6 +49,7 @@ with temp_workspace() as W:
 
     # Copy all images locally and convert any svgs
     for img in soup.findAll("img"):
+
         f_org_img = os.path.join(W.local_dir, img["src"])
         f_img = os.path.join(W.temp_dir, img["src"])
         
@@ -60,7 +61,8 @@ with temp_workspace() as W:
         extension = f_img.split('.')[-1].lower()
         if extension in ["svg","png","jpg","jpeg","gif"]:
             f_name = '.'.join(f_img.split('.')[:-1])
-            cmd = cmd_convert_svg_to_png.format(f = f_name)
+            
+            cmd = cmd_convert_to_png.format(f_img, f_name+'.png')
             os.system(cmd)
             img["src"] = img["src"].replace('.svg','.png')
 
