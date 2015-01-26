@@ -2,7 +2,7 @@ from src.latex_src.os_functions import temp_workspace
 from src.extra_io import mkdir_p
 import argparse
 import bs4
-import uuid, os, shutil
+import os, shutil, codecs
 
 desc = '''
 Converts the final md2reveal .html file into a pdf of slides'''.strip()
@@ -42,11 +42,10 @@ with temp_workspace() as W:
     os.system(cmd)
     os.chdir(W.temp_dir)
 
-    with open(f_html) as FIN:
+    with codecs.open(f_html, "r", "utf-8") as FIN:
         raw = FIN.read()
         full_soup = bs4.BeautifulSoup(raw)
         soup = full_soup.find("div", {"class":"reveal"})
-
 
     # Copy all images locally and convert any svgs
     for img in soup.findAll("img"):
@@ -65,16 +64,18 @@ with temp_workspace() as W:
             os.system(cmd)
             img["src"] = img["src"].replace('.svg','.png')
 
-    with open(f_html, 'w') as FOUT:
-        FOUT.write(unicode(soup))
+    with codecs.open(f_html, "w", "utf-8") as FOUT:
+        FOUT.write(soup.prettify())
     
     os.system(cmd_panddoc.format(f_html,f_tex_content))
 
-    with open(f_tex_content) as FIN:
+
+    with codecs.open(f_tex_content, "r", "utf-8") as FIN:
         tex = FIN.read()
     tex = tex.replace(r'\\',' ')
-    
-    with open(f_tex,'w') as FOUT:
+
+
+    with codecs.open(f_tex, "w", "utf-8") as FOUT:
         FOUT.write(basic_tex%tex)
 
     os.system(cmd_latex.format(f_tex))
