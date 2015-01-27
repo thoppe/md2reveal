@@ -8,11 +8,13 @@
 }
 
 .reveal section img{
-    margin:0;
+    margin-top:10;
+    margin-bottom:10;
 }
 
 .reveal section video{
-    margin:0;
+    margin-top:10;
+    margin-bottom:10;
 }
 
 .reveal .inline_image {
