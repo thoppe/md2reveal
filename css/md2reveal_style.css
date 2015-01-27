@@ -2,21 +2,17 @@
   Image styles
   Markdown example: !(foo.png)
 *********************************************/
-
-.reveal img {
+.reveal figure {
     max-height: 75%;
+    vertical-align:bottom;
 }
 
-.reveal section img {
-    vertical-align:middle;
+.reveal section img{
+    margin:0;
 }
 
-.reveal video {
-    max-height: 75%;
-}
-
-.reveal section video {
-    vertical-align:middle;
+.reveal section video{
+    margin:0;
 }
 
 .reveal .inline_image {
@@ -74,6 +70,17 @@
     font-size:60%;
     text-align: right;
     line-height:110%;  /* slightly compressed */
+}
+
+.reveal figure {
+    max-height: 75%;
+    display:inline-block;
+    vertical-align: bottom;
+}
+
+.reveal figcaption {
+    margin:0;
+    font-size:60%;
 }
 
 /*********************************************

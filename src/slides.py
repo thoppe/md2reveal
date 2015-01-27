@@ -174,8 +174,7 @@ class markdown_presentation(object):
             |other_line).leaveWhitespace()
         include_grammar.setParseAction(process_include_block)
         text = include_grammar.transformString(text)
-        #print text
-        #exit()
+
 
         # Process the slide grammar
         return self.grammar.transformString(text)

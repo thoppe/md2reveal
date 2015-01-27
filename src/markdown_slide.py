@@ -56,18 +56,37 @@ def option_iterator(option_string):
         yield key, value
 
 def process_image(img):
+
+    # Filter out a caption
+    split_text = img["src"].split(' ')
+    img["src"], img["caption"] = split_text[0], ' '.join(split_text[1:])
+
     img_html = '''
+    <figure>
     <a href="{src}">
     <img class="{classname}" src="{src}" {arguments}>
     </a>
+    {caption_html}
+    </figure>
     '''.strip()
 
     video_html = '''
+    <figure>
     <video autoplay loop {arguments}>  
     <source src="{src}" type="video/mp4"> 
     </video>
+    {caption_html}
+    </figure>
     '''.strip()
-    
+
+    img["caption_html"] = ''   
+
+    # Flatten out img["options"]
+    if img["options"]:
+        img["options"] = img["options"][0]
+    else:
+        img["options"] = ""
+       
     extension = os.path.splitext(img["src"])[1].split('.')[-1]
 
     if extension in ["mp4", "m4v"]:
@@ -79,12 +98,6 @@ def process_image(img):
     recognized_opts = "width", "height"
     args, image_class_names = {}, []
 
-    # Flatten out img["options"]
-    if img["options"]:
-        img["options"] = img["options"][0]
-    else:
-        img["options"] = ""
-    
     for key,val in option_iterator(img["options"]):
 
         key = key.lower()
@@ -99,11 +112,17 @@ def process_image(img):
             msg = "Unknown image option {}".format(key)
             logging.warning(msg)
 
+    if img["caption"]:
+        img["caption_html"] = ('<figcaption>{}</figcaption>'
+                               .format(img["caption"]))
+
     arg_text = ['{}="{}"'.format(key,val) for key,val in args.items()]
     arg_text = ' '.join(arg_text)
     
     cls  = ' '.join(image_class_names)
-    html = html.format(src=img['src'], classname=cls, arguments=arg_text)
+    html = html.format(src=img['src'], 
+                       caption_html=img["caption_html"],
+                       classname=cls, arguments=arg_text)
 
     if "link" in img:
         link_text = '<a href={link}>{html_img}</a>'
@@ -199,7 +218,7 @@ class markdown_multiline(object):
         empty_line = LineEnd()("empty")
 
         # White space marker, useful for when I leave whitespace in
-        ws = Optional(Word(" "))
+        ws = Word(" ").suppress()
 
         # Rest of line ROL
         ROL   = SkipTo(LineEnd().suppress(),include=True) 
@@ -211,9 +230,10 @@ class markdown_multiline(object):
         line_rule   = ((rule_marker*4) + ROL)('rule')
 
         image_marker = Literal("!").suppress()
-        image_line   = (image_marker + paren('src') 
-                        + Optional(brackets)('link') + ws
-                        + ws + options + ROL).leaveWhitespace()
+        image_line   = (image_marker + paren('src')
+                        + Optional(brackets)('link') 
+                        + ZeroOrMore(ws)
+                        + options + ROL).leaveWhitespace()
 
         #option_block = (QuotedString(quoteChar='{', 
         #                            endQuoteChar='}',
