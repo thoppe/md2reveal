@@ -160,21 +160,27 @@ class markdown_presentation(object):
 
         # Preprocess any includes
         ROL   = SkipTo(LineEnd().suppress(),include=True)
+        other_line = Combine(SkipTo(LineEnd(),include=True))
+
         include_block = (QuotedString(quoteChar='{', 
                                       endQuoteChar='}',
                                       multiline=True,
                                       unquoteResults=False)
                          + ROL.suppress())
-        comment_line = (Literal("%") + ROL).suppress()
 
-        other_line = Combine(SkipTo(LineEnd(),include=True))
         include_grammar = OneOrMore(
-            comment_line
-            |include_block("include")
+            include_block("include")
             |other_line).leaveWhitespace()
         include_grammar.setParseAction(process_include_block)
         text = include_grammar.transformString(text)
 
+        # Preprocess any comments (two steps since we added the includes)
+        comment_line = (Literal("%") + ROL).suppress()
+        comment_grammar = OneOrMore(
+            comment_line
+            |other_line).leaveWhitespace()
+        include_grammar.setParseAction(process_include_block)
+        text = comment_grammar.transformString(text)
 
         # Process the slide grammar
         return self.grammar.transformString(text)
