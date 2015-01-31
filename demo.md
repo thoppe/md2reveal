@@ -26,8 +26,8 @@ Small inline equation $B_2 = \int x dx$.
 ### images
 	!(image src)[optional image link] <<options>>
     ...
-	!(cc.svg this is the cc caption) <<width:200; transparent>>
-!(cc.svg this is the cc caption) <<width:200; transparent>>
+	!(cc.svg this is the cc _caption_) <<width:200; transparent>>
+!(cc.svg this is the cc _caption_) <<width:200; transparent>>
 
 ### movies
 	(image src.m4v)[optional image link] <<options>>

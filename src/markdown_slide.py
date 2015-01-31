@@ -113,8 +113,10 @@ def process_image(img):
             logging.warning(msg)
 
     if img["caption"]:
-        img["caption_html"] = ('<figcaption>{}</figcaption>'
-                               .format(img["caption"]))
+        
+        # Parse the caption text
+        caption = _global_markdown_line(img["caption"])
+        img["caption_html"] = '<figcaption>{}</figcaption>'.format(caption)
 
     arg_text = ['{}="{}"'.format(key,val) for key,val in args.items()]
     arg_text = ' '.join(arg_text)
