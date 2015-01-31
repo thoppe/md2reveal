@@ -58,8 +58,10 @@ def option_iterator(option_string):
 def process_image(img):
 
     # Filter out a caption
-    split_text = img["src"].split(' ')
-    img["src"], img["caption"] = split_text[0], ' '.join(split_text[1:])
+    #split_text = img["src"].split(' ')
+    #img["src"], img["caption"] = split_text[0], ' '.join(split_text[1:])
+    # Strip the edges of the caption text
+    img["caption"] = img["caption"].strip()
 
     img_html = '''
     <figure>
@@ -116,6 +118,7 @@ def process_image(img):
         
         # Parse the caption text
         caption = _global_markdown_line(img["caption"])
+
         img["caption_html"] = '<figcaption>{}</figcaption>'.format(caption)
 
     arg_text = ['{}="{}"'.format(key,val) for key,val in args.items()]
@@ -222,8 +225,9 @@ class markdown_multiline(object):
         # White space marker, useful for when I leave whitespace in
         ws = Word(" ").suppress()
 
-        # Rest of line ROL
+        # ROL == Rest of line
         ROL   = SkipTo(LineEnd().suppress(),include=True) 
+
         code_marker = ((Literal(' ')*4)).suppress()
         code_line   = (code_marker + ROL).leaveWhitespace()
         code_block = Group(OneOrMore(code_line))('code_block')
@@ -235,7 +239,7 @@ class markdown_multiline(object):
         image_line   = (image_marker + paren('src')
                         + Optional(brackets)('link') 
                         + ZeroOrMore(ws)
-                        + options + ROL).leaveWhitespace()
+                        + options + ROL("caption")).leaveWhitespace()
 
         #option_block = (QuotedString(quoteChar='{', 
         #                            endQuoteChar='}',

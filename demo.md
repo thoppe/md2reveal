@@ -24,10 +24,10 @@ Small inline equation $B_2 = \int x dx$.
 
 ====* 
 ### images
-	!(image src)[optional image link] <<options>>
+	!(image src)[optional image link] <<options>> caption markdown
     ...
-	!(cc.svg this is the cc _caption_) <<width:200; transparent>>
-!(cc.svg this is the cc _caption_) <<width:200; transparent>>
+    !(cc.svg) <<width:200; transparent>>  this is the cc _caption_
+!(cc.svg) <<width:200; transparent>>  this is the cc _caption_
 
 ### movies
 	(image src.m4v)[optional image link] <<options>>
