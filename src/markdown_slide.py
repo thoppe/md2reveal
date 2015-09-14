@@ -118,7 +118,6 @@ def process_image(img):
         
         # Parse the caption text
         caption = _global_markdown_line(img["caption"])
-
         img["caption_html"] = '<figcaption>{}</figcaption>'.format(caption)
 
     arg_text = ['{}="{}"'.format(key,val) for key,val in args.items()]

@@ -47,7 +47,6 @@ reveal_init={
 
     'history': 'true', 
 
-    'keyboard': 'true',
     'overview': 'true', 
     'center': 'true', 
     'touch' : 'true',
@@ -64,7 +63,10 @@ reveal_init={
     'transitionSpeed': '"default"',
     'backgroundtransition': '"default"',
     'viewDistance':3,
-    'rollingLinks': 'false'
+    'rollingLinks': 'false',
+
+    'right_left_arrow_keys':False,
+    
     }
 
 # Set the global for keeping equations
@@ -84,6 +86,14 @@ if os.path.exists(f_reveal_json_args):
         theme = js.pop("theme")
 
     reveal_init.update(js)
+
+# Custom key bindings
+is_right_left_arrow_keys = reveal_init.pop("right_left_arrow_keys")
+if not is_right_left_arrow_keys:
+    reveal_init["keyboard"] = {
+        39 : "next",
+        37 : "prev",
+    }
 
 if not cmdline_args.output:
     cmdline_args.output = cmdline_args.markdown.split('.')[0] + '.html'
