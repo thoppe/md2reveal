@@ -49,13 +49,14 @@ class bounding_box(object):
 
 def get_SVG_bounding_box(soup):
 
+
     # Load the symbols from the defs
     LPATH = np.linspace(0,1,_SVG_CONTROL_POINTS)
     BBOX  = {}
 
     # Loop over the defs and find all the paths
-    # determine the bbox for each symbol
-    for symbol in soup.svg.defs.findAll("symbol"):
+    # determine the bbox for each symbol (skip the defs, some renders miss it)
+    for symbol in soup.svg.findAll("symbol"):
         for path in symbol.findAll("path"):
 
             B = bounding_box()
