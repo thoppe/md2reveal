@@ -52,7 +52,7 @@ def filter_tex_errors(shell_results):
 def build_tex_item(text, filename_only=False, debug=False):
     org_text = text
     original_text = text
-           
+
     if not text.strip():
         logging.warning("Empty line found in textline render")
         return 2
@@ -60,12 +60,14 @@ def build_tex_item(text, filename_only=False, debug=False):
     with osf.cache_result('.render_cache', 
                           render_text,ext='.svg',
                           log_cache=False) as C:
+
         cut_text = org_text
         # Truncate for logging 
         if len(cut_text) > 40:
             cut_text = org_text[:40] + "..."
         logging.info("Rendering text {}".format(cut_text))
         svg_text = C(text,debug)
+
         if filename_only: return C.f_save       
         return svg_text
 
@@ -94,6 +96,16 @@ def render_text(text,debug):
 
         f_pdf = f_tmp_tex.replace('.tex','.pdf')
 
+        # Scale PDF
+        cmd = "pdfjam block.pdf --scale 5.0 --outfile block2.pdf --noautoscale false --landscape"
+        stdout, stderr = shell(cmd)
+        #if stderr: raise RuntimeError(stderr)
+
+        # Crop PDF
+        cmd = "pdfcrop --hires block2.pdf block.pdf"
+        stdout, stderr = shell(cmd)
+        if stderr: raise RuntimeError(stderr)
+        
         # Convert to a SVG
         f_svg = f_pdf.replace('.pdf','.svg')
         cmd = "pdftocairo -svg %s %s"
@@ -102,15 +114,15 @@ def render_text(text,debug):
         if stderr: raise RuntimeError(stderr)
 
         # Crop to the bounding box
-        cmd  = "python %s/svg_crop.py %s %s"
-        args = (scriptpath, f_svg, f_svg)
+        #cmd  = "python %s/svg_crop.py %s %s"
+        #args = (scriptpath, f_svg, f_svg)
 
-        if debug:
-            os.system('bash')
+        #if debug:
+        #    os.system('bash')
 
-        stdout, stderr = shell(cmd % args)             
-        if stderr: 
-            logging.critical(stderr)
+        #stdout, stderr = shell(cmd % args)             
+        #if stderr: 
+        #    logging.critical(stderr)
 
         # Find the baseline
         # baseline = extract_baseline(f_svg)
@@ -123,7 +135,6 @@ def render_text(text,debug):
 
         with open(f_svg) as FIN:
             return FIN.read()
-
 
         '''
         # Convert SVG to PNG for testing

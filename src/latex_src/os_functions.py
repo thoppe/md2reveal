@@ -117,7 +117,6 @@ class cache_result(object):
         self.func = func
         self.extension = ext
         self.log_cache = log_cache
-
         # Crate the cache directory if it doesn't exist
         make_sure_path_exists(self.name)
 
